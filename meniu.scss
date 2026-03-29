@@ -1,0 +1,101 @@
+$nav-bg: var(--bg-header);
+$nav-text: white;
+$highlight: var(--highlight-color);
+
+%reset-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#main-nav {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+
+  .hamburger {
+    display: none;
+    color: $nav-text;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 10px;
+  }
+
+  #menu-toggle { display: none; }
+
+  ul.menu {
+    @extend %reset-list;
+    display: flex;
+    gap: 30px;
+    background-color: rgba(0,0,0,0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+
+    > li {
+      position: relative;
+
+      > a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: $nav-text;
+        text-decoration: none;
+        transition: transform 0.3s ease;
+        font-weight: bold;
+
+        &:hover {
+          transform: scale(1.1);
+          color: $highlight;
+        }
+      }
+
+      ul.submenu {
+        @extend %reset-list;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: $nav-bg;
+        min-width: 200px;
+        transform-origin: top;
+        transform: scaleY(0);
+        transition: transform 0.4s ease;
+        z-index: 100;
+        border: 1px solid var(--border-color);
+
+        li a {
+          display: block;
+          padding: 10px;
+          color: $nav-text;
+          position: relative;
+          text-decoration: none;
+
+          &::before, &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, white, $highlight);
+            height: 0;
+            transition: height 0.3s ease;
+          }
+          &::before { left: 0; }
+          &::after { right: 0; }
+
+          &:hover::before, &:hover::after { height: 100%; }
+        }
+
+        @for $i from 1 through 3 {
+          li:nth-child(#{$i}) a {
+            transition-delay: #{$i * 0.1}s;
+          }
+        }
+      }
+
+      &:hover ul.submenu {
+        transform: scaleY(1);
+      }
+    }
+  }
+}
